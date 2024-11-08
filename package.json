@@ -1,7 +1,11 @@
 {
-  "name": "habittracker",
+  "name": "1-percent-habit-tracker",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/1-percent-habit-tracker.git"
+  },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@testing-library/jest-dom": "^5.17.0",
