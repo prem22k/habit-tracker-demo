@@ -1,0 +1,546 @@
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+.landing-content {
+  text-align: center;
+  padding: 2rem;
+  max-width: 600px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.primary-button, .secondary-button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.primary-button {
+  background-color: #3498db;
+  color: white;
+}
+
+.primary-button:hover {
+  background-color: #2980b9;
+}
+
+.secondary-button {
+  background-color: transparent;
+  border: 2px solid #3498db;
+  color: #3498db;
+}
+
+.secondary-button:hover {
+  background-color: #3498db;
+  color: white;
+}
+
+.intro-section {
+  margin-bottom: 3rem;
+}
+
+.intro-section p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.features-section {
+  margin-bottom: 3rem;
+}
+
+.features-section h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.feature {
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feature h3 {
+  font-size: 1.2rem;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.feature p {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.landing-page {
+  min-height: 100vh;
+  background-color: black;
+  color: white;
+  position: relative;
+}
+
+.background-graphic {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.background-svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transition: background-color 0.3s;
+}
+
+.header-scrolled {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-text {
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.percent-sign {
+  position: relative;
+}
+
+.percent-line {
+  position: absolute;
+  right: -4px;
+  top: 0;
+  width: 2px;
+  background-color: white;
+}
+
+.logo-subtext {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .logo-subtext {
+    display: inline;
+  }
+}
+
+.desktop-nav {
+  display: none;
+  gap: 1rem;
+  align-items: center;
+}
+
+.desktop-nav a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.desktop-nav a:hover {
+  color: #5EEAD4;
+}
+
+.mobile-menu-button {
+  display: block;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.mobile-nav {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.hero {
+  padding: 8rem 1rem 4rem;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.accent {
+  color: #2DD4BF;
+}
+
+.hero-text {
+  font-size: 1.25rem;
+  color: #9ca3af;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.button-icon {
+  margin-left: 0.5rem;
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.features {
+  padding: 4rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.features h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+}
+
+.features-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(94, 234, 212, 0.2);
+}
+
+.feature-card h3 {
+  font-size: 1.25rem;
+  color: #5EEAD4;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+  color: #9ca3af;
+}
+
+.testimonials {
+  padding: 4rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.testimonials h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+}
+
+.testimonials-grid {
+  display: grid;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(94, 234, 212, 0.2);
+}
+
+.testimonial-quote {
+  color: #9ca3af;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  color: #5EEAD4;
+  text-align: right;
+}
+
+.footer {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  padding: 2rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #5EEAD4;
+}
+
+.footer-copyright {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .mobile-menu-button {
+    display: none;
+  }
+
+  .desktop-nav {
+    display: flex;
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.background-graphic svg path[stroke="#1a365d"] {
+  stroke: #006D5B;
+}
+
+.cta-section {
+  background-color: #006D5B;
+  padding: 4rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  font-size: 1.25rem;
+  color: #99F6E4;
+  margin-bottom: 2rem;
+}
+
+.cta-form {
+  max-width: 32rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.cta-input {
+  width: 100%;
+  background-color: white;
+  color: black;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 2px solid transparent;
+}
+
+.cta-input:focus {
+  border-color: white;
+  outline: none;
+}
+
+.cta-button {
+  width: 100%;
+  background-color: black;
+  color: white;
+  border: 2px solid white !important;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: white;
+  color: black;
+  border-color: white;
+}
+
+@media (min-width: 640px) {
+  .cta-form {
+    flex-direction: row;
+  }
+
+  .cta-input {
+    flex: 2;
+  }
+
+  .cta-button {
+    flex: 1;
+  }
+}
+
+.desktop-nav a,
+.mobile-nav a {
+  cursor: pointer;
+}
+
+/* Add these new styles */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #5EEAD4;
+  transform-origin: 0%;
+  z-index: 50;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s;
+  font-size: 1rem;
+  padding: 0;
+}
+
+.nav-link:hover {
+  color: #5EEAD4;
+}
+
+/* Update the logo hover effect */
+.logo {
+  transition: color 0.3s;
+}
+
+.logo:hover .logo-text,
+.logo:hover .logo-subtext {
+  color: #5EEAD4;
+}
+
+/* Update the CTA section */
+.cta-section {
+  background-color: #006D5B;
+  padding: 4rem 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-button {
+  width: 100%;
+  background-color: black !important;
+  color: white !important;
+  border: 2px solid white !important;
+  transition: all 0.3s ease !important;
+}
+
+.cta-button:hover {
+  background-color: white !important;
+  color: black !important;
+} 
