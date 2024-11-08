@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 1% Habit Tracker
 
 A modern habit tracking application that helps users build better habits 1% at a time. Features a sleek dark theme, smooth animations, and Auth0 authentication.
@@ -86,3 +87,7 @@ src/
 - Design inspired by modern web trends
 - Icons from Lucide React
 - Animation library: Framer Motion
+=======
+# habit-tracker-demo
+Demo Repo
+>>>>>>> ceeb7255b2fcb47a3d812e47a083fd8e8d823090
