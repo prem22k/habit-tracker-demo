@@ -6,11 +6,13 @@ export const Button = ({
   variant = 'default', 
   size = 'md',
   className = '',
+  disabled = false,
   ...props 
 }) => {
   return (
     <button 
       className={`button ${variant} ${size} ${className}`}
+      disabled={disabled}
       {...props}
     >
       {children}

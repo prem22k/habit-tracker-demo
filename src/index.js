@@ -1,15 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
-import './index.css';
 import App from './App';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider
-      domain="premsai.uk.auth0.com"
-      clientId="2ut9tx1SGaB553vUj6hopyB1Qj3cxXsv"
-      redirectUri={window.location.origin}
+      domain={process.env.REACT_APP_AUTH0_DOMAIN}
+      clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
+      authorizationParams={{
+        redirect_uri: window.location.origin
+      }}
     >
       <App />
     </Auth0Provider>

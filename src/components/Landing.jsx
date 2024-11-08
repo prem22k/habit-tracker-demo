@@ -7,7 +7,7 @@ import './Landing.css';
 import { Input } from './ui/Input';
 
 const Landing = () => {
-  const { loginWithRedirect } = useAuth0();
+  const { loginWithRedirect, isLoading } = useAuth0();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
 
@@ -83,8 +83,9 @@ const Landing = () => {
             <Button 
               variant="outline" 
               onClick={() => loginWithRedirect()}
+              disabled={isLoading}
             >
-              Log In
+              {isLoading ? 'Loading...' : 'Log In'}
             </Button>
             <Button onClick={() => loginWithRedirect()}>
               Get Started
@@ -123,8 +124,9 @@ const Landing = () => {
               variant="outline" 
               onClick={() => loginWithRedirect()}
               className="full-width"
+              disabled={isLoading}
             >
-              Log In
+              {isLoading ? 'Loading...' : 'Log In'}
             </Button>
             <Button 
               onClick={() => loginWithRedirect()}
