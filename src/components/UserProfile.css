@@ -120,7 +120,7 @@ select:focus {
 }
 
 .preferences-content {
-  margin-bottom: 1rem;
+  space-y: 1rem;
 }
 
 /* Frequency Buttons */
@@ -270,4 +270,23 @@ select:focus {
   .profile-content {
     padding: 2rem;
   }
-} 
+}
+
+/* Add responsive styles for the welcome card */
+@media (max-width: 1024px) {
+  .success-screen > div {
+    width: 50% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .success-screen > div {
+    width: 70% !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .success-screen > div {
+    width: 90% !important;
+  }
+}

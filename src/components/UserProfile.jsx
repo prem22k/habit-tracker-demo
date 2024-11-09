@@ -41,18 +41,14 @@ const UserProfile = ({ onComplete }) => {
 
   if (isSetupComplete) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="min-h-screen bg-gradient-to-br from-gray-900 to-teal-900 text-white p-6 flex items-center justify-center"
-      >
-        <div className="w-full max-w-md bg-gray-800 text-white rounded-lg">
+      <div className="success-screen">
+        <div style={{ width: '35%' }} className="bg-gray-800 text-white rounded-lg mx-auto">
           <div className="p-6">
             <h2 className="text-2xl font-bold text-center text-teal-100 mb-6">
               Welcome, {profile.username}!
             </h2>
-            <div className="space-y-4">
-              <div className="flex justify-center">
+            <div className="space-y-4 relative">
+              <div className="flex justify-center items-center h-16">
                 <CheckCircle className="w-16 h-16 text-teal-400" />
               </div>
               <p className="text-center text-gray-200">
@@ -71,7 +67,7 @@ const UserProfile = ({ onComplete }) => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     );
   }
 
