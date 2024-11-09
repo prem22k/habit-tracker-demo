@@ -2,7 +2,8 @@
 
 A modern habit tracking application that empowers users to improve their lives by just 1% each day. Inspired by *Atomic Habits*, this app focuses on adaptive tracking and smart habit rescheduling. Featuring a sleek dark theme, smooth animations, and secure Auth0 authentication, 1% Habit Tracker is designed for an intuitive and visually appealing experience.
 
-![1% Habit Tracker](screenshot.png)
+![1% Habit Tracker](![image](https://github.com/user-attachments/assets/7df746c5-92b0-4912-baea-3571df7469a3)
+)
 
 ## 🌟 Features
 
