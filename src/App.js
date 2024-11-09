@@ -1,73 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import Landing from './components/Landing';
 import Onboarding from './components/Onboarding';
 import HabitSelection from './components/HabitSelection';
 import UserProfile from './components/UserProfile';
-import './App.css';
+import './styles/common.css';
 
-function App() {
-  const { isLoading, error, isAuthenticated, logout } = useAuth0();
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
-  const [hasSelectedHabits, setHasSelectedHabits] = useState(false);
-  const [hasCompletedProfile, setHasCompletedProfile] = useState(false);
-  const [selectedHabits, setSelectedHabits] = useState([]);
-
-  // Reset states when user logs out
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setHasCompletedOnboarding(false);
-      setHasSelectedHabits(false);
-      setHasCompletedProfile(false);
-      setSelectedHabits([]);
-    }
-  }, [isAuthenticated]);
-
-  if (error) {
-    return <div className="error">Authentication Error: {error.message}</div>;
-  }
+const App = () => {
+  const { isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
-    return <div className="loading">Loading...</div>;
-  }
-
-  const handleOnboardingComplete = () => {
-    setHasCompletedOnboarding(true);
-  };
-
-  const handleHabitSelectionComplete = (habits) => {
-    setSelectedHabits(habits);
-    setHasSelectedHabits(true);
-  };
-
-  const handleProfileComplete = () => {
-    setHasCompletedProfile(true);
-  };
-
-  // Show Landing page if not authenticated
-  if (!isAuthenticated) {
-    return <Landing />;
-  }
-
-  // Show appropriate component based on user's progress
-  if (!hasCompletedOnboarding) {
-    return <Onboarding onComplete={handleOnboardingComplete} />;
-  }
-  
-  if (!hasSelectedHabits) {
-    return <HabitSelection onComplete={handleHabitSelectionComplete} />;
-  }
-
-  if (!hasCompletedProfile) {
     return (
-      <UserProfile 
-        onComplete={handleProfileComplete}
-        selectedHabits={selectedHabits}
-      />
+      <div className="loading-container">
+        <div className="loading-spinner">Loading...</div>
+      </div>
     );
   }
 
-  return <div className="dashboard">Dashboard coming soon!</div>;
-}
+  // Protected Route wrapper
+  const ProtectedRoute = ({ children }) => {
+    if (!isAuthenticated) {
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  };
+
+  return (
+    <Router>
+      <Routes>
+        {/* Public route - Landing page */}
+        <Route path="/" element={<Landing />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/onboarding"
+          element={
+            <ProtectedRoute>
+              <Onboarding />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/habit-selection"
+          element={
+            <ProtectedRoute>
+              <HabitSelection />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Redirect all other routes to landing */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App; 

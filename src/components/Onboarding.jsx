@@ -1,204 +1,150 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from './ui/Button';
-import { ArrowRight, CheckCircle, BarChart2, Calendar, Loader } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import './Onboarding.css';
 
-const slides = [
-  {
-    title: "Adaptive Tracking",
-    description: "Customize your habit tracking to fit your unique lifestyle and goals.",
-    icon: <Calendar className="feature-icon" />,
-  },
-  {
-    title: "Performance Analysis",
-    description: "Gain insights into your progress with detailed analytics and visualizations.",
-    icon: <BarChart2 className="feature-icon" />,
-  },
-  {
-    title: "Smart Rescheduling",
-    description: "Automatically adjust your habits based on your performance and schedule.",
-    icon: <CheckCircle className="feature-icon" />,
-  },
-];
+const Onboarding = () => {
+  const navigate = useNavigate();
+  const [step, setStep] = useState(1);
+  const [userData, setUserData] = useState({
+    name: '',
+    goal: '',
+    preferredTime: 'morning'
+  });
 
-const Onboarding = ({ onComplete }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleComplete = () => {
-    setIsLoading(true);
-    // Simulate loading for 2 seconds
-    setTimeout(() => {
-      setIsLoading(false);
-      onComplete();
-    }, 2000);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const nextSlide = () => {
-    if (currentSlide === slides.length) {
-      handleComplete();
+  const handleNext = () => {
+    if (step < 3) {
+      setStep(step + 1);
     } else {
-      setCurrentSlide((prev) => (prev + 1) % (slides.length + 1));
+      // Save user data and redirect to habit selection
+      navigate('/habit-selection');
     }
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + (slides.length + 1)) % (slides.length + 1));
+  const renderStep = () => {
+    switch (step) {
+      case 1:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="onboarding-step"
+          >
+            <h2>Welcome! Let's get to know you</h2>
+            <div className="input-group">
+              <label htmlFor="name">What should we call you?</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={userData.name}
+                onChange={handleInputChange}
+                placeholder="Enter your name"
+                className="onboarding-input"
+              />
+            </div>
+          </motion.div>
+        );
+
+      case 2:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="onboarding-step"
+          >
+            <h2>Set Your Main Goal</h2>
+            <div className="input-group">
+              <label htmlFor="goal">What's your primary goal?</label>
+              <textarea
+                id="goal"
+                name="goal"
+                value={userData.goal}
+                onChange={handleInputChange}
+                placeholder="e.g., Build a consistent workout routine"
+                className="onboarding-input"
+              />
+            </div>
+          </motion.div>
+        );
+
+      case 3:
+        return (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="onboarding-step"
+          >
+            <h2>Choose Your Preferred Time</h2>
+            <div className="input-group">
+              <label>When are you most productive?</label>
+              <div className="time-options">
+                <button
+                  className={`time-option ${userData.preferredTime === 'morning' ? 'selected' : ''}`}
+                  onClick={() => handleInputChange({ target: { name: 'preferredTime', value: 'morning' } })}
+                >
+                  Morning
+                </button>
+                <button
+                  className={`time-option ${userData.preferredTime === 'afternoon' ? 'selected' : ''}`}
+                  onClick={() => handleInputChange({ target: { name: 'preferredTime', value: 'afternoon' } })}
+                >
+                  Afternoon
+                </button>
+                <button
+                  className={`time-option ${userData.preferredTime === 'evening' ? 'selected' : ''}`}
+                  onClick={() => handleInputChange({ target: { name: 'preferredTime', value: 'evening' } })}
+                >
+                  Evening
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="onboarding-wrapper">
-      {/* Add Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <div className="w-1/3 h-2 bg-[#5EEAD4] rounded-full"></div>
-          <div className="w-1/3 h-2 bg-gray-600 rounded-full"></div>
-          <div className="w-1/3 h-2 bg-gray-600 rounded-full"></div>
+    <div className="onboarding-container">
+      <div className="onboarding-content">
+        <div className="progress-indicator">
+          {[1, 2, 3].map((num) => (
+            <div
+              key={num}
+              className={`progress-dot ${step >= num ? 'active' : ''}`}
+            />
+          ))}
         </div>
-        <div className="flex justify-between text-sm">
-          <span className="font-bold">Onboarding</span>
-          <span>Habit Selection</span>
-          <span>Profile Setup</span>
-        </div>
-      </div>
 
-      {/* Background Animation */}
-      <div className="background-animation">
-        <svg className="background-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <motion.path
-            d="M0,0 L100,0 L100,100 L0,100 Z"
-            fill="none"
-            stroke="rgba(20, 184, 166, 0.1)"
-            strokeWidth="0.5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 5, repeat: Infinity, repeatType: "reverse", ease: "linear" }}
-          />
-        </svg>
-      </div>
+        {renderStep()}
 
-      {/* Welcome Screen */}
-      <AnimatePresence mode="wait">
-        {isLoading ? (
-          <motion.div
-            key="loading"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="loading-screen"
-          >
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            >
-              <Loader className="loading-icon" />
-            </motion.div>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="loading-text"
-            >
-              Preparing your habit journey...
-            </motion.p>
-          </motion.div>
-        ) : (
-          <>
-            {currentSlide === 0 && (
-              <motion.div
-                key="welcome"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5 }}
-                className="welcome-screen"
-              >
-                <motion.div
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
-                  className="logo-container"
-                >
-                  <div className="logo-text">
-                    <span>1</span>
-                    <span className="percent-sign">
-                      %
-                      <motion.div
-                        className="percent-line"
-                        initial={{ height: 0 }}
-                        animate={{ height: 32 }}
-                        transition={{ delay: 0.5, duration: 0.3 }}
-                      />
-                    </span>
-                  </div>
-                  <h1 className="app-name">Habit Tracker</h1>
-                </motion.div>
-                <motion.p
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.4, duration: 0.5 }}
-                  className="welcome-text"
-                >
-                  Build Habits, 1% at a Time
-                </motion.p>
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
-                >
-                  <Button
-                    size="lg"
-                    onClick={nextSlide}
-                    className="start-button"
-                  >
-                    Get Started
-                    <ArrowRight className="button-icon" />
-                  </Button>
-                </motion.div>
-              </motion.div>
-            )}
-
-            {/* Tutorial Slides */}
-            {currentSlide > 0 && currentSlide <= slides.length && (
-              <motion.div
-                key={`slide-${currentSlide}`}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.5 }}
-                className="slide-content"
-              >
-                <div className="slide-icon">{slides[currentSlide - 1].icon}</div>
-                <h2>{slides[currentSlide - 1].title}</h2>
-                <p>{slides[currentSlide - 1].description}</p>
-                <div className="navigation-buttons">
-                  <Button variant="outline" onClick={prevSlide}>
-                    Back
-                  </Button>
-                  <Button onClick={nextSlide}>
-                    {currentSlide === slides.length ? "Let's Begin" : "Next"}
-                  </Button>
-                </div>
-              </motion.div>
-            )}
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Progress Indicator */}
-      <div className="progress-dots">
-        {slides.map((_, index) => (
-          <motion.div
-            key={index}
-            className={`progress-dot ${index + 1 === currentSlide ? 'active' : ''}`}
-            initial={false}
-            animate={{
-              scale: index + 1 === currentSlide ? 1.5 : 1,
-            }}
-            transition={{ duration: 0.3 }}
-          />
-        ))}
+        <motion.button
+          className="next-button"
+          onClick={handleNext}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          disabled={
+            (step === 1 && !userData.name) ||
+            (step === 2 && !userData.goal)
+          }
+        >
+          {step === 3 ? 'Get Started' : 'Next'} <ArrowRight className="button-icon" />
+        </motion.button>
       </div>
     </div>
   );

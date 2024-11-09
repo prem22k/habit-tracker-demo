@@ -1,272 +1,153 @@
-.onboarding-wrapper {
+.onboarding-container {
   min-height: 100vh;
-  background: linear-gradient(to bottom right, black, #006D5B);
-  color: white;
+  background: linear-gradient(to bottom right, #000000, #006D5B);
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-}
-
-.background-animation {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.background-svg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-.welcome-screen,
-.slide-content {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  text-align: center;
+  align-items: center;
   padding: 2rem;
-  z-index: 1;
 }
 
-.logo-container {
-  margin-bottom: 2rem;
-}
-
-.logo-text {
-  font-size: 2.5rem;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-  color: white;
-}
-
-.percent-sign {
-  position: relative;
-}
-
-.percent-line {
-  position: absolute;
-  right: -4px;
-  top: 0;
-  width: 2px;
-  background-color: #5EEAD4;
-}
-
-.welcome-text {
-  font-size: 1.25rem;
-  margin-bottom: 2rem;
-}
-
-.slide-icon {
-  margin-bottom: 2rem;
-}
-
-.feature-icon {
-  width: 4rem;
-  height: 4rem;
-  color: #5EEAD4;
-}
-
-.slide-content h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.slide-content p {
-  font-size: 1.125rem;
-  color: #9ca3af;
-  max-width: 32rem;
-  margin-bottom: 2rem;
-}
-
-.navigation-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
+.onboarding-content {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 1rem;
   width: 100%;
-  max-width: 20rem;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(94, 234, 212, 0.2);
 }
 
-.progress-dots {
+.progress-indicator {
   display: flex;
   justify-content: center;
-  padding: 1rem;
-  gap: 0.5rem;
-  z-index: 1;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .progress-dot {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: #4b5563;
+  background-color: rgba(94, 234, 212, 0.2);
+  transition: all 0.3s ease;
 }
 
 .progress-dot.active {
   background-color: #5EEAD4;
+  transform: scale(1.2);
 }
 
-.button-icon {
-  margin-left: 0.5rem;
+.onboarding-step {
+  margin-bottom: 2rem;
 }
 
-.app-name {
+.onboarding-step h2 {
   color: white;
-  font-size: 2rem;
-  margin-top: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .logo-text {
-    font-size: 3rem;
-  }
-
-  .welcome-text {
-    font-size: 1.5rem;
-  }
-
-  .slide-content h2 {
-    font-size: 2rem;
-  }
-
-  .slide-content p {
-    font-size: 1.25rem;
-  }
-}
-
-/* Add these styles at the top of your file */
-.mb-8 {
-  margin-bottom: 2rem;
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1.5rem;
-}
-
-.flex {
-  display: flex;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
-.w-1\/3 {
-  width: 33.333333%;
-}
-
-.h-2 {
-  height: 0.5rem;
-}
-
-.bg-\[\#5EEAD4\] {
-  background-color: #5EEAD4;
-}
-
-.bg-gray-600 {
-  background-color: #4B5563;
-}
-
-.rounded-full {
-  border-radius: 9999px;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-}
-
-.font-bold {
-  color: #5EEAD4;
-}
-
-/* Update the progress bar container */
-.mb-8 {
-  margin-bottom: 2rem;
-  max-width: 4xl;
-  margin: 0 auto;
-  padding: 1.5rem;
-}
-
-/* Update the progress bar styles */
-.flex.justify-between.items-center.mb-2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  gap: 0.5rem; /* Add gap between bars */
-}
-
-/* Update the individual progress bars */
-.w-1\/3.h-2 {
-  width: 33.333333%;
-  height: 0.5rem; /* Reduce height to match HabitSelection */
-  border-radius: 9999px;
-}
-
-/* Update the labels */
-.flex.justify-between.text-sm {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  padding: 0 0.25rem; /* Add slight padding to align with bars */
-}
-
-/* Update the active label */
-.font-bold {
-  font-weight: 600;
-  color: #5EEAD4;
-}
-
-/* Loading Screen */
-.loading-screen {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.loading-icon {
-  width: 3rem;
-  height: 3rem;
-  color: #5EEAD4;
-}
-
-.loading-text {
-  font-size: 1.25rem;
-  color: #5EEAD4;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
-/* Optional: Add a fade animation for the text */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.input-group {
+  margin-bottom: 1.5rem;
 }
 
-.loading-text {
-  animation: fadeInUp 0.5s ease-out forwards;
+.input-group label {
+  display: block;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.onboarding-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(94, 234, 212, 0.2);
+  border-radius: 0.5rem;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.onboarding-input:focus {
+  outline: none;
+  border-color: #5EEAD4;
+  box-shadow: 0 0 0 2px rgba(94, 234, 212, 0.2);
+}
+
+textarea.onboarding-input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.time-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.time-option {
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(94, 234, 212, 0.2);
+  border-radius: 0.5rem;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.time-option:hover {
+  background: rgba(94, 234, 212, 0.1);
+}
+
+.time-option.selected {
+  background: #5EEAD4;
+  color: black;
+  border-color: #5EEAD4;
+}
+
+.next-button {
+  width: 100%;
+  padding: 1rem;
+  background: #2a9d8f;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.next-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.next-button:not(:disabled):hover {
+  background: #238579;
+}
+
+.button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+@media (max-width: 480px) {
+  .onboarding-content {
+    padding: 1.5rem;
+  }
+
+  .onboarding-step h2 {
+    font-size: 1.5rem;
+  }
+
+  .time-options {
+    grid-template-columns: 1fr;
+  }
 } 
