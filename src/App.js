@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import Landing from './components/Landing.jsx';
-import Onboarding from './components/Onboarding.jsx';
-import HabitSelection from './components/HabitSelection.jsx';
+import Landing from './components/Landing';
+import Onboarding from './components/Onboarding';
+import HabitSelection from './components/HabitSelection';
+import UserProfile from './components/UserProfile';
 import './App.css';
 
 function App() {
   const { isLoading, error, isAuthenticated } = useAuth0();
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [hasSelectedHabits, setHasSelectedHabits] = useState(false);
+  const [hasCompletedProfile, setHasCompletedProfile] = useState(false);
+  const [selectedHabits, setSelectedHabits] = useState([]);
 
   if (error) {
     return <div className="error">Authentication Error: {error.message}</div>;
@@ -22,10 +25,13 @@ function App() {
     setHasCompletedOnboarding(true);
   };
 
-  const handleHabitSelectionComplete = (selectedHabits) => {
-    // Here you would typically save the habits to your backend
-    console.log('Selected habits:', selectedHabits);
+  const handleHabitSelectionComplete = (habits) => {
+    setSelectedHabits(habits);
     setHasSelectedHabits(true);
+  };
+
+  const handleProfileComplete = () => {
+    setHasCompletedProfile(true);
   };
 
   if (isAuthenticated) {
@@ -37,7 +43,15 @@ function App() {
       return <HabitSelection onComplete={handleHabitSelectionComplete} />;
     }
 
-    // This will be replaced with the main dashboard component later
+    if (!hasCompletedProfile) {
+      return (
+        <UserProfile 
+          onComplete={handleProfileComplete}
+          selectedHabits={selectedHabits}
+        />
+      );
+    }
+
     return <div className="dashboard">Dashboard coming soon!</div>;
   }
 

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from './ui/Button';
-import { Check, Plus, X, ChevronRight } from 'lucide-react';
+import { Check, Plus, X, ChevronRight, Loader2, Loader } from 'lucide-react';
 import './HabitSelection.css';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const habitOptions = [
   { id: '1', name: 'Morning Meditation', description: 'Start your day with 10 minutes of mindfulness', frequency: 'Daily' },
@@ -16,6 +17,7 @@ const HabitSelection = ({ onComplete }) => {
   const [selectedHabits, setSelectedHabits] = useState([]);
   const [customHabit, setCustomHabit] = useState('');
   const [customHabitFrequency, setCustomHabitFrequency] = useState('Daily');
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const toggleHabit = (habit) => {
     setSelectedHabits(prev =>
@@ -51,6 +53,45 @@ const HabitSelection = ({ onComplete }) => {
   const removeHabit = (habitId) => {
     setSelectedHabits(prev => prev.filter(habit => habit.id !== habitId));
   };
+
+  const handleContinue = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      onComplete(selectedHabits);
+    }, 2000);
+  };
+
+  if (isTransitioning) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-black to-[#006D5B] text-white flex items-center justify-center">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="loading-screen"
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="flex justify-center"
+            >
+              <Loader className="loading-icon" style={{ width: '64px', height: '64px' }} />
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="text-xl text-white mt-6"
+            >
+              Preparing your profile setup...
+            </motion.p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-[#006D5B] text-white p-6">
@@ -151,14 +192,13 @@ const HabitSelection = ({ onComplete }) => {
         )}
 
         <div className="text-center">
-          <Button
-            onClick={() => onComplete(selectedHabits)}
-            size="lg"
-            className="px-8 py-3 rounded-full"
+          <button
+            onClick={handleContinue}
+            className="bg-[#5EEAD4] text-black font-semibold px-8 py-3 rounded-full hover:bg-[#4ED8C0] transition-colors duration-300 inline-flex items-center"
           >
             Continue to Profile Setup
             <ChevronRight className="ml-2" />
-          </Button>
+          </button>
         </div>
       </div>
     </div>
