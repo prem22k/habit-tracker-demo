@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from './ui/Button';
 import { Check, Plus, X, ChevronRight, Loader2, Loader } from 'lucide-react';
-import './HabitSelection.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import LogoutButton from './ui/LogoutButton';
 
 const habitOptions = [
   { id: '1', name: 'Morning Meditation', description: 'Start your day with 10 minutes of mindfulness', frequency: 'Daily' },
@@ -63,27 +63,27 @@ const HabitSelection = ({ onComplete }) => {
 
   if (isTransitioning) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black to-[#006D5B] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-black to-teal-900 text-white flex items-center justify-center">
         <AnimatePresence mode="wait">
           <motion.div
             key="loading"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="loading-screen"
+            className="text-center"
           >
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
               className="flex justify-center"
             >
-              <Loader className="loading-icon" style={{ width: '64px', height: '64px' }} />
+              <Loader className="w-16 h-16 text-teal-400" />
             </motion.div>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="text-xl text-white mt-6"
+              className="mt-6 text-xl text-white"
             >
               Preparing your profile setup...
             </motion.p>
@@ -94,54 +94,72 @@ const HabitSelection = ({ onComplete }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black to-[#006D5B] text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-black to-teal-900 text-white p-6 relative">
+      {/* Logout Button */}
+      <div className="absolute top-4 right-4 z-50">
+        <LogoutButton />
+      </div>
+
       <div className="max-w-4xl mx-auto">
+        {/* Progress Bar */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-2">
-            <div className="w-1/3 h-2 bg-[#5EEAD4] rounded-full"></div>
-            <div className="w-1/3 h-2 bg-[#5EEAD4] rounded-full"></div>
+            <div className="w-1/3 h-2 bg-teal-400 rounded-full"></div>
+            <div className="w-1/3 h-2 bg-teal-400 rounded-full"></div>
             <div className="w-1/3 h-2 bg-gray-600 rounded-full"></div>
           </div>
           <div className="flex justify-between text-sm">
-            <span>Onboarding</span>
-            <span className="font-bold">Habit Selection</span>
-            <span>Profile Setup</span>
+            <span className="text-gray-400">Onboarding</span>
+            <span className="font-bold text-teal-400">Habit Selection</span>
+            <span className="text-gray-400">Profile Setup</span>
           </div>
         </div>
 
-        <h1 className="text-4xl font-bold mb-4 text-center text-white">Choose Your Habits</h1>
-        <p className="text-xl mb-8 text-center text-gray-300">Select habits to develop and customize your routine.</p>
-        
+        <h1 className="text-4xl font-bold mb-4 text-center">Choose Your Habits</h1>
+        <p className="text-xl mb-8 text-center text-gray-300">
+          Select habits to develop and customize your routine.
+        </p>
+
+        {/* Habit Options Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {habitOptions.map(habit => (
-            <div
+            <motion.div
               key={habit.id}
-              className={`habit-card ${selectedHabits.some(h => h.id === habit.id) ? 'selected' : ''}`}
+              className={`p-6 rounded-xl cursor-pointer transition-all duration-300
+                         ${selectedHabits.some(h => h.id === habit.id)
+                           ? 'bg-teal-400/10 border-2 border-teal-400'
+                           : 'bg-black/30 border border-teal-400/20 hover:border-teal-400/40'}
+                         relative group`}
               onClick={() => toggleHabit(habit)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
             >
-              <h3>{habit.name}</h3>
-              <p>{habit.description}</p>
-              <p className="frequency">{habit.frequency}</p>
+              <h3 className="text-xl font-semibold mb-2">{habit.name}</h3>
+              <p className="text-gray-300 mb-3">{habit.description}</p>
+              <p className="text-sm text-teal-400">{habit.frequency}</p>
               {selectedHabits.some(h => h.id === habit.id) && (
-                <Check className="check-icon" />
+                <Check className="absolute top-4 right-4 text-teal-400 w-6 h-6" />
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className="bg-black bg-opacity-50 p-6 rounded-lg mb-8">
+        {/* Custom Habit Form */}
+        <div className="bg-black/30 backdrop-blur-md p-6 rounded-xl border border-teal-400/20 mb-8">
           <h3 className="text-2xl font-semibold mb-4">Add Custom Habit</h3>
           <form onSubmit={addCustomHabit} className="space-y-4">
             <input
               type="text"
-              className="w-full bg-gray-800 text-white p-3 rounded-md"
+              className="w-full bg-black/30 text-white p-3 rounded-md border border-teal-400/20
+                         focus:border-teal-400 focus:outline-none"
               placeholder="Enter your custom habit"
               value={customHabit}
               onChange={(e) => setCustomHabit(e.target.value)}
               required
             />
             <select
-              className="w-full bg-gray-800 text-white p-3 rounded-md"
+              className="w-full bg-black/30 text-white p-3 rounded-md border border-teal-400/20
+                         focus:border-teal-400 focus:outline-none"
               value={customHabitFrequency}
               onChange={(e) => setCustomHabitFrequency(e.target.value)}
             >
@@ -150,55 +168,62 @@ const HabitSelection = ({ onComplete }) => {
               <option value="3 times a week">3 times a week</option>
               <option value="Custom">Custom</option>
             </select>
-            <Button
-              type="submit"
-              className="w-full"
-            >
-              <Plus className="inline mr-2" />
+            <Button type="submit" className="w-full">
+              <Plus className="w-5 h-5 mr-2" />
               Add Habit
             </Button>
           </form>
         </div>
 
+        {/* Selected Habits List */}
         {selectedHabits.length > 0 && (
-          <div className="bg-black bg-opacity-50 p-6 rounded-lg mb-8">
+          <div className="bg-black/30 backdrop-blur-md p-6 rounded-xl border border-teal-400/20 mb-8">
             <h2 className="text-2xl font-semibold mb-4">Selected Habits</h2>
-            {selectedHabits.map(habit => (
-              <div key={habit.id} className="flex items-center justify-between mb-4 p-3 bg-gray-800 rounded-md">
-                <div>
-                  <h3 className="font-semibold">{habit.name}</h3>
-                  <select
-                    className="mt-1 bg-gray-700 text-white p-2 rounded-md"
-                    value={habit.frequency}
-                    onChange={(e) => updateHabitFrequency(habit.id, e.target.value)}
-                  >
-                    <option>Daily</option>
-                    <option>Weekly</option>
-                    <option>3 times a week</option>
-                    <option>Custom</option>
-                  </select>
-                </div>
-                <Button
-                  onClick={() => removeHabit(habit.id)}
-                  variant="outline"
-                  className="text-red-500 hover:text-red-700"
-                  aria-label="Remove habit"
+            <div className="space-y-4">
+              {selectedHabits.map(habit => (
+                <div
+                  key={habit.id}
+                  className="flex items-center justify-between p-4 bg-black/30 rounded-lg border border-teal-400/20"
                 >
-                  <X className="h-6 w-6" />
-                </Button>
-              </div>
-            ))}
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-2">{habit.name}</h3>
+                    <select
+                      className="bg-black/30 text-white p-2 rounded-md border border-teal-400/20
+                                focus:border-teal-400 focus:outline-none"
+                      value={habit.frequency}
+                      onChange={(e) => updateHabitFrequency(habit.id, e.target.value)}
+                    >
+                      <option>Daily</option>
+                      <option>Weekly</option>
+                      <option>3 times a week</option>
+                      <option>Custom</option>
+                    </select>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    onClick={() => removeHabit(habit.id)}
+                    className="text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
-        <div className="text-center">
-          <button
+        {/* Continue Button */}
+        <div className="text-center mt-8">
+          <Button
             onClick={handleContinue}
-            className="bg-[#5EEAD4] text-black font-semibold px-8 py-3 rounded-full hover:bg-[#4ED8C0] transition-colors duration-300 inline-flex items-center"
+            className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-full
+                     inline-flex items-center space-x-2 transform transition-all duration-300
+                     hover:scale-105"
+            disabled={selectedHabits.length === 0}
           >
-            Continue to Profile Setup
-            <ChevronRight className="ml-2" />
-          </button>
+            <span>Continue to Profile Setup</span>
+            <ChevronRight className="w-5 h-5" />
+          </Button>
         </div>
       </div>
     </div>

@@ -1,68 +1,53 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import Landing from './components/Landing';
 import Onboarding from './components/Onboarding';
 import HabitSelection from './components/HabitSelection';
 import UserProfile from './components/UserProfile';
-import './styles/common.css';
+import Landing from './components/Landing';
 
-const App = () => {
+function App() {
   const { isAuthenticated, isLoading } = useAuth0();
+  const [currentStep, setCurrentStep] = useState('onboarding'); // onboarding, habits, profile
 
   if (isLoading) {
     return (
-      <div className="loading-container">
-        <div className="loading-spinner">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-br from-black to-teal-900 text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-teal-400 mx-auto"></div>
+          <p className="mt-4 text-xl">Loading...</p>
+        </div>
       </div>
     );
   }
 
-  // Protected Route wrapper
-  const ProtectedRoute = ({ children }) => {
-    if (!isAuthenticated) {
-      return <Navigate to="/" replace />;
-    }
-    return children;
+  if (!isAuthenticated) {
+    return <Landing />;
+  }
+
+  const handleOnboardingComplete = () => {
+    setCurrentStep('habits');
   };
 
-  return (
-    <Router>
-      <Routes>
-        {/* Public route - Landing page */}
-        <Route path="/" element={<Landing />} />
+  const handleHabitSelectionComplete = () => {
+    setCurrentStep('profile');
+  };
 
-        {/* Protected routes */}
-        <Route
-          path="/onboarding"
-          element={
-            <ProtectedRoute>
-              <Onboarding />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/habit-selection"
-          element={
-            <ProtectedRoute>
-              <HabitSelection />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <UserProfile />
-            </ProtectedRoute>
-          }
-        />
+  const handleProfileComplete = () => {
+    // Navigate to dashboard or main app
+    console.log('Profile complete, ready for dashboard');
+  };
 
-        {/* Redirect all other routes to landing */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
-  );
-};
+  // Render the appropriate component based on current step
+  switch (currentStep) {
+    case 'onboarding':
+      return <Onboarding onComplete={handleOnboardingComplete} />;
+    case 'habits':
+      return <HabitSelection onComplete={handleHabitSelectionComplete} />;
+    case 'profile':
+      return <UserProfile onComplete={handleProfileComplete} />;
+    default:
+      return <Onboarding onComplete={handleOnboardingComplete} />;
+  }
+}
 
 export default App; 

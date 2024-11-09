@@ -1,23 +1,53 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Keep only essential global styles that can't be handled by Tailwind */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@layer components {
+  .page-container {
+    @apply min-h-screen bg-gradient-to-br from-black to-teal-900 text-white relative overflow-hidden;
+  }
+
+  .content-container {
+    @apply max-w-7xl mx-auto px-4 py-8 relative z-10;
+  }
+
+  .card {
+    @apply bg-black/50 backdrop-blur-md p-6 rounded-lg border border-teal-400/20 
+           transition-all duration-300 hover:translate-y-[-2px] hover:border-teal-400/40;
+  }
+
+  .form-label {
+    @apply block mb-2 text-white;
+  }
+
+  .form-select {
+    @apply w-full px-4 py-3 bg-black/30 border border-teal-400/20 rounded-md text-white mb-4
+           focus:border-teal-400 focus:outline-none;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-teal-600;
+  }
 }

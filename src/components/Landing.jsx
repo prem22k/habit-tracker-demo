@@ -1,202 +1,283 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
-import './Landing.css';
+import { Button } from './ui/Button';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { ArrowRight, Menu, X } from 'lucide-react';
+import { Input } from './ui/Input';
 
 const Landing = () => {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
-  const [isHeaderScrolled, setIsHeaderScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+  const { loginWithRedirect, isLoading } = useAuth0();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
   const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsHeaderScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleGetStarted = () => {
-    if (!isAuthenticated) {
-      loginWithRedirect({
-        appState: { returnTo: '/onboarding' }
-      });
-    }
-  };
-
-  const scrollToSection = (sectionId) => {
-    const element = document.getElementById(sectionId);
+  const scrollTo = (id) => {
+    const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-    setIsMobileMenuOpen(false);
   };
 
   return (
-    <div className="landing-page">
+    <div className="min-h-screen bg-gradient-to-br from-black to-teal-900 text-white relative overflow-x-hidden">
+      {/* Progress bar */}
       <motion.div
-        className="progress-bar"
-        style={{ scaleX: scrollYProgress }}
+        className="fixed top-0 left-0 right-0 h-1 bg-teal-400 origin-left z-50"
+        style={{ scaleX }}
       />
 
-      <header className={`header ${isHeaderScrolled ? 'header-scrolled' : ''}`}>
-        <div className="header-content">
-          <div className="logo">
-            <span className="logo-text">
-              1<span className="percent-sign">%</span>
-            </span>
-            <span className="logo-subtext">Habit Tracker</span>
+      {/* Background graphic */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <svg className="absolute w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: '#000', stopOpacity: 0 }} />
+              <stop offset="50%" style={{ stopColor: '#006D5B', stopOpacity: 0.1 }} />
+              <stop offset="100%" style={{ stopColor: '#000', stopOpacity: 0 }} />
+            </linearGradient>
+          </defs>
+          <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#grad)" />
+          <path d="M0,50 Q50,0 100,50 T0,50" fill="none" stroke="#006D5B" strokeWidth="0.1" strokeOpacity="0.5" />
+          <path d="M0,50 Q50,100 100,50 T0,50" fill="none" stroke="#006D5B" strokeWidth="0.1" strokeOpacity="0.5" />
+        </svg>
+      </div>
+
+      {/* Header */}
+      <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        scrollY > 50 ? 'bg-black/80 backdrop-blur-md py-4' : 'py-6'
+      }`}>
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center space-x-2">
+            <motion.div
+              className="text-2xl font-bold flex items-center"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <span>1</span>
+              <span className="relative">
+                %
+                <motion.div
+                  className="absolute -right-0.5 top-0 w-0.5 h-6 bg-teal-400"
+                  initial={{ height: 0 }}
+                  animate={{ height: 24 }}
+                  transition={{ delay: 0.2, duration: 0.3 }}
+                />
+              </span>
+            </motion.div>
+            <span className="text-lg font-medium">Habit Tracker</span>
           </div>
 
-          <nav className="desktop-nav">
-            <button onClick={() => scrollToSection('features')} className="nav-link">Features</button>
-            <button onClick={() => scrollToSection('testimonials')} className="nav-link">Testimonials</button>
-            <button onClick={handleGetStarted} className="nav-link">Get Started</button>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <button onClick={() => scrollTo('features')} 
+                    className="text-gray-300 hover:text-white transition-colors">
+              Features
+            </button>
+            <button onClick={() => scrollTo('testimonials')} 
+                    className="text-gray-300 hover:text-white transition-colors">
+              Testimonials
+            </button>
+            <Button variant="outline" onClick={() => loginWithRedirect()} disabled={isLoading}>
+              {isLoading ? 'Loading...' : 'Log In'}
+            </Button>
+            <Button onClick={() => loginWithRedirect()}>
+              Get Started
+            </Button>
           </nav>
 
+          {/* Mobile Menu Button */}
           <button 
-            className="mobile-menu-button"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <ChevronDown />
+            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
-        {isMobileMenuOpen && (
-          <nav className="mobile-nav">
-            <button onClick={() => scrollToSection('features')} className="nav-link">Features</button>
-            <button onClick={() => scrollToSection('testimonials')} className="nav-link">Testimonials</button>
-            <button onClick={handleGetStarted} className="nav-link">Get Started</button>
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <nav className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-md py-4 px-4 space-y-4">
+            <button 
+              onClick={() => {
+                scrollTo('features');
+                setIsMenuOpen(false);
+              }}
+              className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            >
+              Features
+            </button>
+            <button 
+              onClick={() => {
+                scrollTo('testimonials');
+                setIsMenuOpen(false);
+              }}
+              className="block w-full text-left px-4 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+            >
+              Testimonials
+            </button>
+            <div className="px-4 space-y-2">
+              <Button 
+                variant="outline" 
+                onClick={() => loginWithRedirect()}
+                className="w-full"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Loading...' : 'Log In'}
+              </Button>
+              <Button 
+                onClick={() => loginWithRedirect()}
+                className="w-full"
+              >
+                Get Started
+              </Button>
+            </div>
           </nav>
         )}
       </header>
 
-      <main>
-        <motion.section 
-          className="hero"
-          style={{ opacity }}
-        >
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            Build Better Habits
-            <br />
-            <span className="accent">One Day</span> at a Time
-          </motion.h1>
-
-          <motion.p
-            className="hero-text"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Track your habits, build consistency, and transform your life with our
-            science-backed habit tracking system.
-          </motion.p>
-
+      {/* Main Content */}
+      <main className="pt-32">
+        {/* Hero Section */}
+        <section className="container mx-auto px-4 py-16 text-center">
           <motion.div
-            className="hero-buttons"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <motion.button
-              className="cta-button"
-              onClick={handleGetStarted}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Get Started <ArrowRight className="button-icon" />
-            </motion.button>
-          </motion.div>
-        </motion.section>
-
-        <section id="features" className="features">
-          <h2>Why Choose 1% Habit Tracker?</h2>
-          <motion.div 
-            className="features-grid"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+            className="max-w-3xl mx-auto"
           >
-            <div className="feature-card">
-              <h3>Smart Tracking</h3>
-              <p>Intelligent habit tracking that adapts to your schedule and lifestyle</p>
-            </div>
-            <div className="feature-card">
-              <h3>Visual Progress</h3>
-              <p>Beautiful visualizations of your progress to keep you motivated</p>
-            </div>
-            <div className="feature-card">
-              <h3>Daily Insights</h3>
-              <p>Get personalized insights and recommendations for improvement</p>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              Build Habits{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-600">
+                1% Better
+              </span>
+              {' '}Every Day
+            </h1>
+            <p className="text-xl text-gray-300 mb-8">
+              Track your progress, stay motivated, and achieve your goals with our intuitive habit tracking app.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Button size="lg" onClick={() => loginWithRedirect()} className="w-full sm:w-auto">
+                Get Started Now
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                Learn More
+              </Button>
             </div>
           </motion.div>
         </section>
 
-        <section id="testimonials" className="testimonials">
-          <h2>What Our Users Say</h2>
-          <motion.div 
-            className="testimonials-grid"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <div className="testimonial-card">
-              <p className="testimonial-quote">
-                "This app has completely transformed how I approach my daily habits. The 1% improvement
-                concept really works!"
-              </p>
-              <p className="testimonial-author">- Sarah J.</p>
-            </div>
-            <div className="testimonial-card">
-              <p className="testimonial-quote">
-                "Simple, intuitive, and effective. Exactly what I needed to build better habits."
-              </p>
-              <p className="testimonial-author">- Michael R.</p>
-            </div>
-          </motion.div>
+        {/* Features Section */}
+        <section id="features" className="container mx-auto px-4 py-16">
+          <h2 className="text-4xl font-bold text-center mb-12">Key Features</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Adaptive Tracking",
+                description: "Customize your habit tracking to fit your unique lifestyle and goals."
+              },
+              {
+                title: "Performance Analysis",
+                description: "Gain insights into your progress with detailed analytics and visualizations."
+              },
+              {
+                title: "Smart Rescheduling",
+                description: "Automatically adjust your habits based on your performance and schedule."
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={index}
+                className="bg-black/30 backdrop-blur-md p-6 rounded-xl border border-teal-400/20 hover:border-teal-400/40 transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </section>
 
-        <section className="cta-section">
-          <div className="container">
-            <h2>Start Your Journey Today</h2>
-            <p>Join thousands of others building better habits</p>
-            <motion.button
-              className="cta-button"
-              onClick={handleGetStarted}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Get Started Now <ArrowRight className="button-icon" />
-            </motion.button>
+        {/* Testimonials Section */}
+        <section id="testimonials" className="container mx-auto px-4 py-16">
+          <h2 className="text-4xl font-bold text-center mb-12">What Our Users Say</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                quote: "This app has completely transformed my daily routine. I'm more productive and focused than ever!",
+                author: "Sarah K., Entrepreneur"
+              },
+              {
+                quote: "The 1% Habit Tracker made it easy for me to build consistent habits and achieve my fitness goals.",
+                author: "Mike L., Fitness Enthusiast"
+              }
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                className="bg-black/30 backdrop-blur-md p-8 rounded-xl border border-teal-400/20"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+              >
+                <p className="text-lg mb-4 text-gray-300 italic">"{testimonial.quote}"</p>
+                <p className="text-teal-400">- {testimonial.author}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="bg-gradient-to-r from-teal-900/50 to-black/50 backdrop-blur-md">
+          <div className="container mx-auto px-4 py-16 text-center">
+            <h2 className="text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
+            <p className="text-xl text-gray-300 mb-8">Join 10,000+ users already building better habits.</p>
+            <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1"
+              />
+              <Button onClick={() => loginWithRedirect()}>
+                Get Started
+              </Button>
+            </form>
           </div>
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-logo">
-            <span className="logo-text">1%</span>
-            <span className="logo-subtext">Habit Tracker</span>
+      {/* Footer */}
+      <footer className="bg-black/80 backdrop-blur-md">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl font-bold">1%</span>
+              <span>Habit Tracker</span>
+            </div>
+            <div className="flex items-center space-x-6">
+              <a href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+              <a href="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+              <a href="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</a>
+            </div>
+            <div className="text-gray-400">
+              © {new Date().getFullYear()} 1% Habit Tracker. All rights reserved.
+            </div>
           </div>
-          <div className="footer-links">
-            <a href="#features">Features</a>
-            <a href="#testimonials">Testimonials</a>
-            <a href="#privacy">Privacy</a>
-          </div>
-          <p className="footer-copyright">
-            © {new Date().getFullYear()} 1% Habit Tracker. All rights reserved.
-          </p>
         </div>
       </footer>
     </div>
