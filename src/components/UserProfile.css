@@ -65,7 +65,9 @@ h1 {
 
 .profile-content {
   padding: 1.5rem;
-  space-y: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* Input Styles */
@@ -95,7 +97,7 @@ input[type="text"]:focus,
 select:focus {
   border-color: #5EEAD4;
   outline: none;
-  ring: 2px #5EEAD4;
+  box-shadow: 0 0 0 2px #5EEAD4; 
 }
 
 .input-help {
@@ -118,7 +120,7 @@ select:focus {
 }
 
 .preferences-content {
-  space-y: 1rem;
+  margin-bottom: 1rem;
 }
 
 /* Frequency Buttons */
