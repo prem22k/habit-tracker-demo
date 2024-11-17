@@ -124,12 +124,4 @@ We welcome contributions! Here's how you can help:
 
 [MIT](LICENSE)
 
-## 🙏 Acknowledgments
-
-- **Design**: Inspired by modern UI/UX trends
-- **Icons**: Provided by Lucide React
-- **Animations**: Powered by Framer Motion
-
----
-
 Feel free to reach out with any questions or suggestions for improvements!
